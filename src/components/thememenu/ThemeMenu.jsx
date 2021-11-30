@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import ThemeAction from "../redux/actions/ThemeAction";
 import "./thememenu.css";
-
 const mode_settings = [
   {
     id: "light",
@@ -70,6 +71,24 @@ const ThemeMenu = () => {
   clickOutsideRef(menu_ref, menu_toggle_ref);
   const setActive = () => menu_ref.current.classList.add("active");
   const closeMenu = () => menu_ref.current.classList.remove("active");
+
+  const [currMode, setcurrMode] = useState("light");
+  const dispatch = useDispatch();
+  const setMode = (mode) => {
+    setcurrMode(mode.id);
+    localStorage.setItem("themeMode", mode.class);
+    dispatch(ThemeAction.setMode(mode.class));
+  };
+  useEffect(() => {
+    const themeClass = mode_settings.find(
+      (e) => e.class === localStorage.getItem("themeMode", "theme-mode-light")
+    );
+
+    if (themeClass !== undefined) {
+      setcurrMode(themeClass.id);
+    }
+  }, []);
+
   return (
     <div>
       <button
@@ -88,8 +107,12 @@ const ThemeMenu = () => {
           <span>Choose mode</span>
           <ul className="mode-list">
             {mode_settings.map((item, index) => (
-              <li key={index}>
-                <div className={`mode-list__color ${item.background}`}>
+              <li key={index} onClick={() => setMode(item)}>
+                <div
+                  className={`mode-list__color ${item.background} ${
+                    item.id === currMode ? "active" : ""
+                  }`}
+                >
                   <i className="bx bx-check"></i>
                 </div>
                 <span>{item.name}</span>
