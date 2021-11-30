@@ -10,7 +10,7 @@ const chartOptions = {
   series: [
     {
       name: "Online Customers",
-      data: [40, 70, 20, 90, 36, 80, 30, 91, 60],
+      data: [40, 70, 20, 90, 36, 80, 30, 90, 60],
     },
     {
       name: "Store Customers",
